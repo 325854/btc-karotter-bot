@@ -3,7 +3,8 @@ name: Post BTC to Karotter
 on:
   workflow_dispatch:
   schedule:
-    - cron: '7 * * * *'
+    - cron: '*/5 * * * *'
+      timezone: "Asia/Tokyo"
 
 jobs:
   post:
@@ -28,6 +29,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Debug trigger
+        run: |
+          echo "event=${{ github.event_name }}"
+          echo "ref=${{ github.ref }}"
+          date
+          date -u
 
       - name: Install dependencies
         run: |
