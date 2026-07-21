@@ -25,13 +25,12 @@ def build_post_text(price: float, change_24h: float, vs_currency: str, now_local
     symbol = "$" if vs_currency.lower() == "usd" else ("¥" if vs_currency.lower() == "jpy" else f"{vs_currency.upper()} ")
     arrow = "📈" if change_24h >= 0 else "📉"
     sign = "+" if change_24h >= 0 else ""
-return (
-    f"₿ Bitcoin 定点報告 {now_local:%Y-%m-%d %H:%M}\n"
-    f"現在価格: {symbol}{price:,.2f}\n"
-    f"24時間変動: {arrow} {sign}{change_24h:.2f}%\n"
-    f"#BTC #Bitcoin"
-)
-
+    return (
+        f"₿ Bitcoin 定点報告 {now_local:%Y-%m-%d %H:%M}\n"
+        f"現在価格: {symbol}{price:,.2f}\n"
+        f"24時間変動: {arrow} {sign}{change_24h:.2f}%\n"
+        f"#BTC #Bitcoin"
+    )
 
 
 async def post_once() -> None:
