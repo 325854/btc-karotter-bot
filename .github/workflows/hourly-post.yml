@@ -3,7 +3,7 @@ name: Post BTC to Karotter
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '7 * * * *'
       timezone: "Asia/Tokyo"
 
 jobs:
@@ -11,32 +11,36 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      TZ: Asia/Tokyo
+      KAROTTER_USERNAME: ${{ secrets.KAROTTER_USERNAME }}
+      KAROTTER_PASSWORD: ${{ secrets.KAROTTER_PASSWORD }}
+      KAROTTER_CLIENT_TYPE: ${{ secrets.KAROTTER_CLIENT_TYPE }}
+      KAROTTER_DEVICE_NAME: ${{ secrets.KAROTTER_DEVICE_NAME }}
+      KAROTTER_VISIBILITY: ${{ secrets.KAROTTER_VISIBILITY }}
+      KAROTTER_REPLY_RESTRICTION: ${{ secrets.KAROTTER_REPLY_RESTRICTION }}
+      BTC_VS_CURRENCY: ${{ secrets.BTC_VS_CURRENCY }}
+      POST_WITH_IMAGE: ${{ secrets.POST_WITH_IMAGE }}
+      TZ: ${{ secrets.TZ }}
+      DRY_RUN: 'false'
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Debug trigger
         run: |
           echo "event=${{ github.event_name }}"
           echo "ref=${{ github.ref }}"
           date
           date -u
-name: Post BTC to Karotter
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '*/5 * * * *'
-      timezone: "Asia/Tokyo"
-
-jobs:
-  post:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      TZ: Asia/Tokyo
-    steps:
-      - name: Debug trigger
+      - name: Install dependencies
         run: |
-          echo "event=${{ github.event_name }}"
-          echo "ref=${{ github.ref }}"
-          date
-          date -u
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run bot once
+        run: python main.py --once
