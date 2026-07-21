@@ -30,13 +30,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Debug trigger
-        run: |
-          echo "event=${{ github.event_name }}"
-          echo "ref=${{ github.ref }}"
-          date
-          date -u
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
